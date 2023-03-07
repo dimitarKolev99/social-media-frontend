@@ -13,17 +13,27 @@
 
 /**
  * @export
- * @interface ComExampleSpringDemoApiFilesUploadFileInfo
+ * @interface SignupRequest
  */
-export interface ComExampleSpringDemoApiFilesUploadFileInfo {
-    /**
-     * @type {number}
-     * @memberof ComExampleSpringDemoApiFilesUploadFileInfo
-     */
-    id?: number;
+export interface SignupRequest {
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoApiFilesUploadFileInfo
+     * @memberof SignupRequest
      */
-    uri?: string;
+    username?: string;
+    /**
+     * @type {string}
+     * @memberof SignupRequest
+     */
+    email?: string;
+    /**
+     * @type {string}
+     * @memberof SignupRequest
+     */
+    password?: string;
+    /**
+     * @type {Set<string>}
+     * @memberof SignupRequest
+     */
+    role?: Set<string>;
 }

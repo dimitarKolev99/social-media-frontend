@@ -13,26 +13,26 @@
 
 /**
  * @export
- * @interface ComExampleSpringDemoLoginRoleDtoRole
+ * @interface Role
  */
-export interface ComExampleSpringDemoLoginRoleDtoRole {
+export interface Role {
     /**
      * @type {number}
-     * @memberof ComExampleSpringDemoLoginRoleDtoRole
+     * @memberof Role
      */
     id?: number;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoLoginRoleDtoRole
+     * @memberof Role
      */
-    name?: ComExampleSpringDemoLoginRoleDtoRoleNameEnum;
+    name?: RoleNameEnum;
 }
 
 /**
  * @export
  * @enum {string}
  */
-export enum ComExampleSpringDemoLoginRoleDtoRoleNameEnum {
+export enum RoleNameEnum {
     User = 'ROLE_USER',
     Moderator = 'ROLE_MODERATOR',
     Admin = 'ROLE_ADMIN'

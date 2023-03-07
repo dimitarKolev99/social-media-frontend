@@ -11,19 +11,34 @@
  * Do not edit the class manually.
  */
 
+import type {
+    FileInfo,
+    User,
+} from './';
+
 /**
  * @export
- * @interface ComExampleSpringDemoLoginDtoRequestLoginRequest
+ * @interface Post
  */
-export interface ComExampleSpringDemoLoginDtoRequestLoginRequest {
+export interface Post {
+    /**
+     * @type {number}
+     * @memberof Post
+     */
+    id?: number;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoLoginDtoRequestLoginRequest
+     * @memberof Post
      */
-    username?: string;
+    description?: string;
     /**
-     * @type {string}
-     * @memberof ComExampleSpringDemoLoginDtoRequestLoginRequest
+     * @type {User}
+     * @memberof Post
      */
-    password?: string;
+    user?: User;
+    /**
+     * @type {FileInfo}
+     * @memberof Post
+     */
+    fileInfo?: FileInfo;
 }

@@ -16,7 +16,7 @@ import type { AjaxResponse } from 'rxjs/ajax';
 import { BaseAPI } from '../runtime';
 import type { OperationOpts } from '../runtime';
 import type {
-    ComExampleSpringDemoLoginRefreshtokenErrorMessage,
+    ErrorMessage,
 } from '../models';
 
 /**

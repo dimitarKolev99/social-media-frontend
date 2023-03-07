@@ -11,29 +11,49 @@
  * Do not edit the class manually.
  */
 
+import type {
+    RefreshToken,
+    Role,
+} from './';
+
 /**
  * @export
- * @interface ComExampleSpringDemoLoginRefreshtokenErrorMessage
+ * @interface User
  */
-export interface ComExampleSpringDemoLoginRefreshtokenErrorMessage {
+export interface User {
     /**
      * @type {number}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenErrorMessage
+     * @memberof User
      */
-    value?: number;
+    id?: number;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenErrorMessage
+     * @memberof User
      */
-    date?: string;
+    username: string;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenErrorMessage
+     * @memberof User
      */
-    message?: string;
+    email: string;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenErrorMessage
+     * @memberof User
      */
-    description?: string;
+    password: string;
+    /**
+     * @type {Set<Role>}
+     * @memberof User
+     */
+    roles?: Set<Role>;
+    /**
+     * @type {RefreshToken}
+     * @memberof User
+     */
+    refreshToken?: RefreshToken;
+    /**
+     * @type {string}
+     * @memberof User
+     */
+    asJsonString?: string;
 }

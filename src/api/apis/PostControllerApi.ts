@@ -16,18 +16,18 @@ import type { AjaxResponse } from 'rxjs/ajax';
 import { BaseAPI, throwIfNullOrUndefined, encodeURI } from '../runtime';
 import type { OperationOpts, HttpHeaders, HttpQuery } from '../runtime';
 import type {
-    ComExampleSpringDemoApiPostDtoPost,
-    ComExampleSpringDemoApiPostDtoRequestPostRequest,
-    ComExampleSpringDemoLoginRefreshtokenErrorMessage,
+    ErrorMessage,
+    Post,
+    PostRequest,
 } from '../models';
 
 export interface AddPostOnCurrentUserRequest {
-    comExampleSpringDemoApiPostDtoRequestPostRequest: ComExampleSpringDemoApiPostDtoRequestPostRequest;
+    postRequest: PostRequest;
 }
 
 export interface CreatePostRequest {
     userId: number;
-    comExampleSpringDemoApiPostDtoRequestPostRequest: ComExampleSpringDemoApiPostDtoRequestPostRequest;
+    postRequest: PostRequest;
 }
 
 export interface DeleteAllPostsOfUserRequest {
@@ -53,7 +53,7 @@ export interface GetPostByIdRequest {
 
 export interface UpdatePostRequest {
     id: number;
-    comExampleSpringDemoApiPostDtoRequestPostRequest: ComExampleSpringDemoApiPostDtoRequestPostRequest;
+    postRequest: PostRequest;
 }
 
 /**
@@ -63,40 +63,40 @@ export class PostControllerApi extends BaseAPI {
 
     /**
      */
-    addPostOnCurrentUser({ comExampleSpringDemoApiPostDtoRequestPostRequest }: AddPostOnCurrentUserRequest): Observable<ComExampleSpringDemoApiPostDtoPost>
-    addPostOnCurrentUser({ comExampleSpringDemoApiPostDtoRequestPostRequest }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<AjaxResponse<ComExampleSpringDemoApiPostDtoPost>>
-    addPostOnCurrentUser({ comExampleSpringDemoApiPostDtoRequestPostRequest }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<ComExampleSpringDemoApiPostDtoPost | AjaxResponse<ComExampleSpringDemoApiPostDtoPost>> {
-        throwIfNullOrUndefined(comExampleSpringDemoApiPostDtoRequestPostRequest, 'comExampleSpringDemoApiPostDtoRequestPostRequest', 'addPostOnCurrentUser');
+    addPostOnCurrentUser({ postRequest }: AddPostOnCurrentUserRequest): Observable<Post>
+    addPostOnCurrentUser({ postRequest }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
+    addPostOnCurrentUser({ postRequest }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
+        throwIfNullOrUndefined(postRequest, 'postRequest', 'addPostOnCurrentUser');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
         };
 
-        return this.request<ComExampleSpringDemoApiPostDtoPost>({
+        return this.request<Post>({
             url: '/api/posts',
             method: 'POST',
             headers,
-            body: comExampleSpringDemoApiPostDtoRequestPostRequest,
+            body: postRequest,
         }, opts?.responseOpts);
     };
 
     /**
      */
-    createPost({ userId, comExampleSpringDemoApiPostDtoRequestPostRequest }: CreatePostRequest): Observable<ComExampleSpringDemoApiPostDtoPost>
-    createPost({ userId, comExampleSpringDemoApiPostDtoRequestPostRequest }: CreatePostRequest, opts?: OperationOpts): Observable<AjaxResponse<ComExampleSpringDemoApiPostDtoPost>>
-    createPost({ userId, comExampleSpringDemoApiPostDtoRequestPostRequest }: CreatePostRequest, opts?: OperationOpts): Observable<ComExampleSpringDemoApiPostDtoPost | AjaxResponse<ComExampleSpringDemoApiPostDtoPost>> {
+    createPost({ userId, postRequest }: CreatePostRequest): Observable<Post>
+    createPost({ userId, postRequest }: CreatePostRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
+    createPost({ userId, postRequest }: CreatePostRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
         throwIfNullOrUndefined(userId, 'userId', 'createPost');
-        throwIfNullOrUndefined(comExampleSpringDemoApiPostDtoRequestPostRequest, 'comExampleSpringDemoApiPostDtoRequestPostRequest', 'createPost');
+        throwIfNullOrUndefined(postRequest, 'postRequest', 'createPost');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
         };
 
-        return this.request<ComExampleSpringDemoApiPostDtoPost>({
+        return this.request<Post>({
             url: '/api/users/{userId}/posts'.replace('{userId}', encodeURI(userId)),
             method: 'POST',
             headers,
-            body: comExampleSpringDemoApiPostDtoRequestPostRequest,
+            body: postRequest,
         }, opts?.responseOpts);
     };
 
@@ -146,12 +146,12 @@ export class PostControllerApi extends BaseAPI {
 
     /**
      */
-    getAllPostsByUserId({ id }: GetAllPostsByUserIdRequest): Observable<Array<ComExampleSpringDemoApiPostDtoPost>>
-    getAllPostsByUserId({ id }: GetAllPostsByUserIdRequest, opts?: OperationOpts): Observable<AjaxResponse<Array<ComExampleSpringDemoApiPostDtoPost>>>
-    getAllPostsByUserId({ id }: GetAllPostsByUserIdRequest, opts?: OperationOpts): Observable<Array<ComExampleSpringDemoApiPostDtoPost> | AjaxResponse<Array<ComExampleSpringDemoApiPostDtoPost>>> {
+    getAllPostsByUserId({ id }: GetAllPostsByUserIdRequest): Observable<Array<Post>>
+    getAllPostsByUserId({ id }: GetAllPostsByUserIdRequest, opts?: OperationOpts): Observable<AjaxResponse<Array<Post>>>
+    getAllPostsByUserId({ id }: GetAllPostsByUserIdRequest, opts?: OperationOpts): Observable<Array<Post> | AjaxResponse<Array<Post>>> {
         throwIfNullOrUndefined(id, 'id', 'getAllPostsByUserId');
 
-        return this.request<Array<ComExampleSpringDemoApiPostDtoPost>>({
+        return this.request<Array<Post>>({
             url: '/api/users/{id}/posts'.replace('{id}', encodeURI(id)),
             method: 'GET',
         }, opts?.responseOpts);
@@ -159,12 +159,12 @@ export class PostControllerApi extends BaseAPI {
 
     /**
      */
-    getPostById({ id }: GetPostByIdRequest): Observable<ComExampleSpringDemoApiPostDtoPost>
-    getPostById({ id }: GetPostByIdRequest, opts?: OperationOpts): Observable<AjaxResponse<ComExampleSpringDemoApiPostDtoPost>>
-    getPostById({ id }: GetPostByIdRequest, opts?: OperationOpts): Observable<ComExampleSpringDemoApiPostDtoPost | AjaxResponse<ComExampleSpringDemoApiPostDtoPost>> {
+    getPostById({ id }: GetPostByIdRequest): Observable<Post>
+    getPostById({ id }: GetPostByIdRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
+    getPostById({ id }: GetPostByIdRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
         throwIfNullOrUndefined(id, 'id', 'getPostById');
 
-        return this.request<ComExampleSpringDemoApiPostDtoPost>({
+        return this.request<Post>({
             url: '/api/posts/{id}'.replace('{id}', encodeURI(id)),
             method: 'GET',
         }, opts?.responseOpts);
@@ -172,21 +172,21 @@ export class PostControllerApi extends BaseAPI {
 
     /**
      */
-    updatePost({ id, comExampleSpringDemoApiPostDtoRequestPostRequest }: UpdatePostRequest): Observable<ComExampleSpringDemoApiPostDtoPost>
-    updatePost({ id, comExampleSpringDemoApiPostDtoRequestPostRequest }: UpdatePostRequest, opts?: OperationOpts): Observable<AjaxResponse<ComExampleSpringDemoApiPostDtoPost>>
-    updatePost({ id, comExampleSpringDemoApiPostDtoRequestPostRequest }: UpdatePostRequest, opts?: OperationOpts): Observable<ComExampleSpringDemoApiPostDtoPost | AjaxResponse<ComExampleSpringDemoApiPostDtoPost>> {
+    updatePost({ id, postRequest }: UpdatePostRequest): Observable<Post>
+    updatePost({ id, postRequest }: UpdatePostRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
+    updatePost({ id, postRequest }: UpdatePostRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
         throwIfNullOrUndefined(id, 'id', 'updatePost');
-        throwIfNullOrUndefined(comExampleSpringDemoApiPostDtoRequestPostRequest, 'comExampleSpringDemoApiPostDtoRequestPostRequest', 'updatePost');
+        throwIfNullOrUndefined(postRequest, 'postRequest', 'updatePost');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
         };
 
-        return this.request<ComExampleSpringDemoApiPostDtoPost>({
+        return this.request<Post>({
             url: '/api/posts/{id}'.replace('{id}', encodeURI(id)),
             method: 'PUT',
             headers,
-            body: comExampleSpringDemoApiPostDtoRequestPostRequest,
+            body: postRequest,
         }, opts?.responseOpts);
     };
 

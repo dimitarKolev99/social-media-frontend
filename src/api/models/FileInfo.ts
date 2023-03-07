@@ -13,12 +13,17 @@
 
 /**
  * @export
- * @interface ComExampleSpringDemoApiPostDtoRequestPostRequest
+ * @interface FileInfo
  */
-export interface ComExampleSpringDemoApiPostDtoRequestPostRequest {
+export interface FileInfo {
+    /**
+     * @type {number}
+     * @memberof FileInfo
+     */
+    id?: number;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoApiPostDtoRequestPostRequest
+     * @memberof FileInfo
      */
-    description?: string;
+    uri?: string;
 }

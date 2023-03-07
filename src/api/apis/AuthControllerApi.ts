@@ -16,17 +16,17 @@ import type { AjaxResponse } from 'rxjs/ajax';
 import { BaseAPI, throwIfNullOrUndefined } from '../runtime';
 import type { OperationOpts, HttpHeaders } from '../runtime';
 import type {
-    ComExampleSpringDemoLoginDtoRequestLoginRequest,
-    ComExampleSpringDemoLoginDtoRequestSignupRequest,
-    ComExampleSpringDemoLoginRefreshtokenErrorMessage,
+    ErrorMessage,
+    LoginRequest,
+    SignupRequest,
 } from '../models';
 
 export interface AuthenticateUserRequest {
-    comExampleSpringDemoLoginDtoRequestLoginRequest: ComExampleSpringDemoLoginDtoRequestLoginRequest;
+    loginRequest: LoginRequest;
 }
 
 export interface RegisterUserRequest {
-    comExampleSpringDemoLoginDtoRequestSignupRequest: ComExampleSpringDemoLoginDtoRequestSignupRequest;
+    signupRequest: SignupRequest;
 }
 
 /**
@@ -36,10 +36,10 @@ export class AuthControllerApi extends BaseAPI {
 
     /**
      */
-    authenticateUser({ comExampleSpringDemoLoginDtoRequestLoginRequest }: AuthenticateUserRequest): Observable<object>
-    authenticateUser({ comExampleSpringDemoLoginDtoRequestLoginRequest }: AuthenticateUserRequest, opts?: OperationOpts): Observable<AjaxResponse<object>>
-    authenticateUser({ comExampleSpringDemoLoginDtoRequestLoginRequest }: AuthenticateUserRequest, opts?: OperationOpts): Observable<object | AjaxResponse<object>> {
-        throwIfNullOrUndefined(comExampleSpringDemoLoginDtoRequestLoginRequest, 'comExampleSpringDemoLoginDtoRequestLoginRequest', 'authenticateUser');
+    authenticateUser({ loginRequest }: AuthenticateUserRequest): Observable<object>
+    authenticateUser({ loginRequest }: AuthenticateUserRequest, opts?: OperationOpts): Observable<AjaxResponse<object>>
+    authenticateUser({ loginRequest }: AuthenticateUserRequest, opts?: OperationOpts): Observable<object | AjaxResponse<object>> {
+        throwIfNullOrUndefined(loginRequest, 'loginRequest', 'authenticateUser');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export class AuthControllerApi extends BaseAPI {
             url: '/api/auth/signin',
             method: 'POST',
             headers,
-            body: comExampleSpringDemoLoginDtoRequestLoginRequest,
+            body: loginRequest,
         }, opts?.responseOpts);
     };
 
@@ -77,10 +77,10 @@ export class AuthControllerApi extends BaseAPI {
 
     /**
      */
-    registerUser({ comExampleSpringDemoLoginDtoRequestSignupRequest }: RegisterUserRequest): Observable<object>
-    registerUser({ comExampleSpringDemoLoginDtoRequestSignupRequest }: RegisterUserRequest, opts?: OperationOpts): Observable<AjaxResponse<object>>
-    registerUser({ comExampleSpringDemoLoginDtoRequestSignupRequest }: RegisterUserRequest, opts?: OperationOpts): Observable<object | AjaxResponse<object>> {
-        throwIfNullOrUndefined(comExampleSpringDemoLoginDtoRequestSignupRequest, 'comExampleSpringDemoLoginDtoRequestSignupRequest', 'registerUser');
+    registerUser({ signupRequest }: RegisterUserRequest): Observable<object>
+    registerUser({ signupRequest }: RegisterUserRequest, opts?: OperationOpts): Observable<AjaxResponse<object>>
+    registerUser({ signupRequest }: RegisterUserRequest, opts?: OperationOpts): Observable<object | AjaxResponse<object>> {
+        throwIfNullOrUndefined(signupRequest, 'signupRequest', 'registerUser');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export class AuthControllerApi extends BaseAPI {
             url: '/api/auth/signup',
             method: 'POST',
             headers,
-            body: comExampleSpringDemoLoginDtoRequestSignupRequest,
+            body: signupRequest,
         }, opts?.responseOpts);
     };
 

@@ -16,12 +16,12 @@ import type { AjaxResponse } from 'rxjs/ajax';
 import { BaseAPI, throwIfNullOrUndefined, encodeURI } from '../runtime';
 import type { OperationOpts, HttpHeaders, HttpQuery } from '../runtime';
 import type {
-    ComExampleSpringDemoApiUserDtoUser,
-    ComExampleSpringDemoLoginRefreshtokenErrorMessage,
+    ErrorMessage,
+    User,
 } from '../models';
 
 export interface CreateUserRequest {
-    comExampleSpringDemoApiUserDtoUser: ComExampleSpringDemoApiUserDtoUser;
+    user: User;
 }
 
 export interface DeleteTutorialRequest {
@@ -38,7 +38,7 @@ export interface GetUserByIdRequest {
 
 export interface UpdateUserRequest {
     id: number;
-    comExampleSpringDemoApiUserDtoUser: ComExampleSpringDemoApiUserDtoUser;
+    user: User;
 }
 
 /**
@@ -48,20 +48,20 @@ export class UserControllerApi extends BaseAPI {
 
     /**
      */
-    createUser({ comExampleSpringDemoApiUserDtoUser }: CreateUserRequest): Observable<ComExampleSpringDemoApiUserDtoUser>
-    createUser({ comExampleSpringDemoApiUserDtoUser }: CreateUserRequest, opts?: OperationOpts): Observable<AjaxResponse<ComExampleSpringDemoApiUserDtoUser>>
-    createUser({ comExampleSpringDemoApiUserDtoUser }: CreateUserRequest, opts?: OperationOpts): Observable<ComExampleSpringDemoApiUserDtoUser | AjaxResponse<ComExampleSpringDemoApiUserDtoUser>> {
-        throwIfNullOrUndefined(comExampleSpringDemoApiUserDtoUser, 'comExampleSpringDemoApiUserDtoUser', 'createUser');
+    createUser({ user }: CreateUserRequest): Observable<User>
+    createUser({ user }: CreateUserRequest, opts?: OperationOpts): Observable<AjaxResponse<User>>
+    createUser({ user }: CreateUserRequest, opts?: OperationOpts): Observable<User | AjaxResponse<User>> {
+        throwIfNullOrUndefined(user, 'user', 'createUser');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
         };
 
-        return this.request<ComExampleSpringDemoApiUserDtoUser>({
+        return this.request<User>({
             url: '/api/users',
             method: 'POST',
             headers,
-            body: comExampleSpringDemoApiUserDtoUser,
+            body: user,
         }, opts?.responseOpts);
     };
 
@@ -91,15 +91,15 @@ export class UserControllerApi extends BaseAPI {
 
     /**
      */
-    getAllUser({ username }: GetAllUserRequest): Observable<Array<ComExampleSpringDemoApiUserDtoUser>>
-    getAllUser({ username }: GetAllUserRequest, opts?: OperationOpts): Observable<AjaxResponse<Array<ComExampleSpringDemoApiUserDtoUser>>>
-    getAllUser({ username }: GetAllUserRequest, opts?: OperationOpts): Observable<Array<ComExampleSpringDemoApiUserDtoUser> | AjaxResponse<Array<ComExampleSpringDemoApiUserDtoUser>>> {
+    getAllUser({ username }: GetAllUserRequest): Observable<Array<User>>
+    getAllUser({ username }: GetAllUserRequest, opts?: OperationOpts): Observable<AjaxResponse<Array<User>>>
+    getAllUser({ username }: GetAllUserRequest, opts?: OperationOpts): Observable<Array<User> | AjaxResponse<Array<User>>> {
 
         const query: HttpQuery = {};
 
         if (username != null) { query['username'] = username; }
 
-        return this.request<Array<ComExampleSpringDemoApiUserDtoUser>>({
+        return this.request<Array<User>>({
             url: '/api/users',
             method: 'GET',
             query,
@@ -108,12 +108,12 @@ export class UserControllerApi extends BaseAPI {
 
     /**
      */
-    getUserById({ id }: GetUserByIdRequest): Observable<ComExampleSpringDemoApiUserDtoUser>
-    getUserById({ id }: GetUserByIdRequest, opts?: OperationOpts): Observable<AjaxResponse<ComExampleSpringDemoApiUserDtoUser>>
-    getUserById({ id }: GetUserByIdRequest, opts?: OperationOpts): Observable<ComExampleSpringDemoApiUserDtoUser | AjaxResponse<ComExampleSpringDemoApiUserDtoUser>> {
+    getUserById({ id }: GetUserByIdRequest): Observable<User>
+    getUserById({ id }: GetUserByIdRequest, opts?: OperationOpts): Observable<AjaxResponse<User>>
+    getUserById({ id }: GetUserByIdRequest, opts?: OperationOpts): Observable<User | AjaxResponse<User>> {
         throwIfNullOrUndefined(id, 'id', 'getUserById');
 
-        return this.request<ComExampleSpringDemoApiUserDtoUser>({
+        return this.request<User>({
             url: '/api/users/{id}'.replace('{id}', encodeURI(id)),
             method: 'GET',
         }, opts?.responseOpts);
@@ -121,21 +121,21 @@ export class UserControllerApi extends BaseAPI {
 
     /**
      */
-    updateUser({ id, comExampleSpringDemoApiUserDtoUser }: UpdateUserRequest): Observable<ComExampleSpringDemoApiUserDtoUser>
-    updateUser({ id, comExampleSpringDemoApiUserDtoUser }: UpdateUserRequest, opts?: OperationOpts): Observable<AjaxResponse<ComExampleSpringDemoApiUserDtoUser>>
-    updateUser({ id, comExampleSpringDemoApiUserDtoUser }: UpdateUserRequest, opts?: OperationOpts): Observable<ComExampleSpringDemoApiUserDtoUser | AjaxResponse<ComExampleSpringDemoApiUserDtoUser>> {
+    updateUser({ id, user }: UpdateUserRequest): Observable<User>
+    updateUser({ id, user }: UpdateUserRequest, opts?: OperationOpts): Observable<AjaxResponse<User>>
+    updateUser({ id, user }: UpdateUserRequest, opts?: OperationOpts): Observable<User | AjaxResponse<User>> {
         throwIfNullOrUndefined(id, 'id', 'updateUser');
-        throwIfNullOrUndefined(comExampleSpringDemoApiUserDtoUser, 'comExampleSpringDemoApiUserDtoUser', 'updateUser');
+        throwIfNullOrUndefined(user, 'user', 'updateUser');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
         };
 
-        return this.request<ComExampleSpringDemoApiUserDtoUser>({
+        return this.request<User>({
             url: '/api/users/{id}'.replace('{id}', encodeURI(id)),
             method: 'PUT',
             headers,
-            body: comExampleSpringDemoApiUserDtoUser,
+            body: user,
         }, opts?.responseOpts);
     };
 

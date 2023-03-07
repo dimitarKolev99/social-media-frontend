@@ -12,32 +12,32 @@
  */
 
 import type {
-    ComExampleSpringDemoApiUserDtoUser,
+    User,
 } from './';
 
 /**
  * @export
- * @interface ComExampleSpringDemoLoginRefreshtokenDtoRefreshToken
+ * @interface RefreshToken
  */
-export interface ComExampleSpringDemoLoginRefreshtokenDtoRefreshToken {
+export interface RefreshToken {
     /**
      * @type {number}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenDtoRefreshToken
+     * @memberof RefreshToken
      */
     id?: number;
     /**
-     * @type {ComExampleSpringDemoApiUserDtoUser}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenDtoRefreshToken
+     * @type {User}
+     * @memberof RefreshToken
      */
-    user?: ComExampleSpringDemoApiUserDtoUser;
+    user?: User;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenDtoRefreshToken
+     * @memberof RefreshToken
      */
     token?: string;
     /**
      * @type {string}
-     * @memberof ComExampleSpringDemoLoginRefreshtokenDtoRefreshToken
+     * @memberof RefreshToken
      */
     expiryDate?: string;
 }
