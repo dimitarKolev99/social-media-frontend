@@ -1,220 +1,135 @@
 <template>
   <div class="column justify-center items-center">
+    <input @click="inputFocused" v-model="newPostInput" />
+
+    <q-dialog v-model="newPostModalOpened">
+      <q-card class="modal-dialog">
+        <q-card-section>
+          <q-input type="textarea" v-model="newPostInput" />
+        </q-card-section>
+        <q-card-section v-if="addPhotoViewer">
+          <q-img v-if="addPhotoViewer && isImageUploaded" width="100%" />
+          <div class="photo-viewer">
+            <q-icon
+              v-if="addPhotoViewer"
+              name="file_upload"
+              size="2rem"
+              class="upload-icon"
+              @click="iconClickHandler"
+            />
+          </div>
+          <input type="file" hidden ref="fileInputRef" />
+        </q-card-section>
+        <q-card-actions>
+          <q-btn
+            label="pic"
+            @click="addPhotoViewer = !addPhotoViewer"
+            color="green-4"
+            style="border-radius: 15%"
+          />
+        </q-card-actions>
+        <q-card-actions>
+          <q-btn color="primary" label="Post" style="width: 100%" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-list separator class="column justify-center items-center list-width">
-      <q-card class="q-mb-sm card-width">
-        <q-card-section>
-          <div
-            style="
-              display: flex;
-              flex-direction: row;
-              align-items: flex-start;
-              justify-content: start;
-            "
-          >
-            <img
-              width="32"
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              style="border-radius: 50%; margin-right: 1rem"
-            />
-
-            <div>Dimitar Kolev</div>
-          </div>
-        </q-card-section>
-        <q-card-section>
-          <div>Description</div>
-        </q-card-section>
-        <q-card-section class="text-center">
-          <q-img
-            width="50%"
-            src="https://cdn.quasar.dev/logo-v2/svg/logo.svg"
-          ></q-img>
-        </q-card-section>
-        <q-card-section>
-          <div
-            style="
-              display: flex;
-              flex-direction: row;
-              justify-content: space-between;
-              align-items: center;
-              width: 100%;
-            "
-          >
-            <div
-              style="
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: flex-start;
-              "
-            >
-              <q-icon name="thumb_up" />
-              <div>12</div>
-            </div>
-            <div>12 Comments</div>
-          </div>
-        </q-card-section>
-        <q-card-actions>
-          <div
-            style="
-              display: flex;
-              flex-direction: row;
-              justify-content: center;
-              align-items: stretch;
-              width: 100%;
-            "
-          >
-            <q-btn
-              label="Like"
-              style="width: 100%"
-              class="like-btn no-shadow segoe-600"
-              @click="logoutHandler"
-            />
-            <q-btn
-              label="comment"
-              style="width: 100%"
-              class="comment-btn no-shadow segoe-600"
-            />
-          </div>
-        </q-card-actions>
-        <q-card-section>
-          <div class="container">
-            <div
-              style="
-                display: flex;
-                flex-direction: row;
-                align-items: flex-start;
-                justify-content: start;
-
-                padding-bottom: 1rem;
-              "
-            >
-              <img
-                style="border-radius: 50%; margin-right: 1rem"
-                width="32"
-                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              />
-              <div>
-                <div>Dimitar Kolev</div>
-                <div>Comment</div>
-              </div>
-            </div>
-            <div
-              style="display: flex; flex-direction: row; align-items: center"
-            >
-              <img
-                style="border-radius: 50%"
-                width="32"
-                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              />
-              <q-input
-                v-model="text"
-                filled
-                autogrow
-                style="margin-left: 1rem; width: 100%"
-                bg-color="web-wash"
-                label="Write a comment"
-              >
-                <template v-slot:append>
-                  <q-icon name="send" class="cursor-pointer" />
-                </template>
-              </q-input>
-              <!-- <input type="text" style="margin-left: 1rem" /> -->
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-      <q-card class="q-mb-sm">
-        <q-card-section>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-section>
-        <q-card-actions>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-actions>
-      </q-card>
-      <q-card class="q-mb-sm">
-        <q-card-section>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-section>
-        <q-card-actions>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-actions>
-      </q-card>
-      <q-card class="q-mb-sm">
-        <q-card-section>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-section>
-        <q-card-actions>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-actions>
-      </q-card>
-      <q-card class="q-mb-sm">
-        <q-card-section>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-section>
-        <q-card-actions>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-actions>
-      </q-card>
-      <q-card class="q-mb-sm">
-        <q-card-section>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-section>
-        <q-card-actions>
-          <div class="text-h6">Our Changing Planet</div>
-          <div class="text-subtitle2">by John Doe</div>
-        </q-card-actions>
-
-        <q-page-scroller position="top" :scroll-offset="150" :offset="[0, 0]">
-          <div
-            class="col cursor-pointer q-pa-sm bg-accent text-white text-center"
-          >
-            Scroll back up...
-          </div>
-        </q-page-scroller>
-      </q-card>
+      <Post v-for="post in posts" :key="post.id" :post="post" />
+      <q-page-scroller position="top" :scroll-offset="150" :offset="[0, 0]">
+        <div
+          class="col cursor-pointer q-pa-sm bg-accent text-white text-center"
+        >
+          Scroll back up...
+        </div>
+      </q-page-scroller>
     </q-list>
   </div>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script lang="ts">
+import { defineComponent, onMounted, ref, computed } from 'vue';
 import { useAuthStore } from 'src/stores/auth';
 import { useRouter } from 'vue-router';
+import Post from './Post.vue';
+import { GetAllPostsRequest, PostControllerApi } from 'src/api';
+import { lastValueFrom } from 'rxjs';
+import { useApiStore } from 'src/stores/ApiStore';
 
 const { logout } = useAuthStore();
 
-export default {
+export default defineComponent({
   name: 'Feed',
+  components: { Post },
 
   setup(props) {
-    const text = ref('');
-
     const router = useRouter();
+
+    const allPostRequest: GetAllPostsRequest = {
+      page: undefined,
+      size: undefined,
+    };
+
+    let response;
+
+    let posts = ref([]);
+
+    const newPostInput = ref('');
+
+    const newPostModalOpened = ref(false);
+
+    const addPhotoViewer = ref(false);
+
+    const fileInputRef = ref(null);
+
+    const isImageUploaded = ref(false);
+
+    onMounted(async () => {
+      const apiStore = useApiStore();
+      const postControllerApi: PostControllerApi =
+        apiStore.getPostControllerApi;
+
+      response = await lastValueFrom(
+        postControllerApi.getAllPosts(allPostRequest)
+      );
+
+      posts.value = response.posts;
+    });
 
     function logoutHandler() {
       logout();
       router.push('/');
     }
 
+    function inputChangeHandler(e) {
+      console.log(e);
+    }
+
+    function inputFocused(e) {
+      newPostModalOpened.value = true;
+    }
+
+    function iconClickHandler() {
+      fileInputRef.value.click();
+    }
+
     return {
-      text,
       logout,
       logoutHandler,
+      posts,
+      inputChangeHandler,
+      newPostInput,
+      inputFocused,
+      newPostModalOpened,
+      addPhotoViewer,
+      iconClickHandler,
+      fileInputRef,
+      isImageUploaded,
     };
   },
-};
+});
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 
 .segoe-600
   font-family: Segoe UI Historic, Segoe UI, Helvetica, Arial, sans-serif
@@ -234,13 +149,49 @@ export default {
   width: 100%
 
 .list-width
-  width: 50%
+  width: 30%
 
-@media only screen and (max-width: 600px)
+.photo-viewer
+  width: 100%
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+
+.modal-dialog
+  width: 30%
+
+@media only screen and (max-width: 480px)
   .card-width
     width: 90%
-  .list-width
+  .list-width,
+  .modal-dialog
     width: 100%
+
+
+
+@media only screen and (min-width: 481px) and (max-width: 768px)
+  .card-width
+    width: 80%
+  .list-width,
+  .modal-dialog
+    width: 90%
+
+@media only screen and (min-width: 769px) and (max-width: 1024px)
+  .card-width
+    width: 100%
+  .list-width,
+  .modal-dialog
+    width: 40%
+
+@media only screen and (min-width: 1025px) and (max-width: 1200px)
+  .card-width
+    width: 100%
+  .list-width,
+  .modal-dialog
+    width: 30%
+
+
 
 .like-btn
   background: $white
@@ -257,4 +208,12 @@ export default {
   background: $hover-overlay
 .comment-btn:before
   box-shadow: none
+
+
+.upload-icon
+  padding: 5px
+  &:hover
+    border-radius: 50%
+    cursor: pointer
+    background: $web-wash
 </style>

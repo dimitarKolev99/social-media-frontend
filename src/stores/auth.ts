@@ -22,7 +22,6 @@ export const useAuthStore = defineStore('auth', {
     },
 
     logout() {
-      console.log('HERE');
       this.user = null;
       window.localStorage.removeItem('userInfo');
     },

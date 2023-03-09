@@ -11,33 +11,34 @@
  * Do not edit the class manually.
  */
 
-import type {
-    User,
-} from './';
-
 /**
  * @export
- * @interface RefreshToken
+ * @interface JwtResponse
  */
-export interface RefreshToken {
+export interface JwtResponse {
+    /**
+     * @type {string}
+     * @memberof JwtResponse
+     */
+    jwt?: string;
     /**
      * @type {number}
-     * @memberof RefreshToken
+     * @memberof JwtResponse
      */
     id?: number;
     /**
-     * @type {User}
-     * @memberof RefreshToken
+     * @type {string}
+     * @memberof JwtResponse
      */
-    user?: User;
+    username?: string;
     /**
      * @type {string}
-     * @memberof RefreshToken
+     * @memberof JwtResponse
      */
-    token?: string;
+    email?: string;
     /**
-     * @type {string}
-     * @memberof RefreshToken
+     * @type {Array<string>}
+     * @memberof JwtResponse
      */
-    expiryDate?: string;
+    roles?: Array<string>;
 }

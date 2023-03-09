@@ -165,17 +165,20 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   AuthControllerApi,
-  ComExampleSpringDemoLoginDtoRequestSignupRequest,
+  SignupRequest,
   RegisterUserRequest,
-  ComExampleSpringDemoLoginDtoRequestLoginRequest,
+  LoginRequest,
   AuthenticateUserRequest,
 } from 'src/api';
 import { lastValueFrom } from 'rxjs';
 import { useAuthStore } from 'src/stores/auth';
+import { useApiStore } from 'src/stores/ApiStore';
 
 const authApi: AuthControllerApi = new AuthControllerApi();
 
 const authStore = useAuthStore();
+
+const apiStore = useApiStore();
 
 export default defineComponent({
   props: {},
@@ -222,7 +225,7 @@ export default defineComponent({
       bar,
 
       onSubmitSignup() {
-        const userRequest: ComExampleSpringDemoLoginDtoRequestSignupRequest = {
+        const userRequest: SignupRequest = {
           username: username.value,
           email: email.value,
           password: password.value,
@@ -230,7 +233,7 @@ export default defineComponent({
         };
 
         const req: RegisterUserRequest = {
-          comExampleSpringDemoLoginDtoRequestSignupRequest: userRequest,
+          signupRequest: userRequest,
         };
 
         // authApi
@@ -262,13 +265,13 @@ export default defineComponent({
       },
 
       onSubmitLogin() {
-        const reqBody: ComExampleSpringDemoLoginDtoRequestLoginRequest = {
+        const reqBody: LoginRequest = {
           username: username.value,
           password: password.value,
         };
 
         const req: AuthenticateUserRequest = {
-          comExampleSpringDemoLoginDtoRequestLoginRequest: reqBody,
+          loginRequest: reqBody,
         };
 
         async function performLogin() {
@@ -286,6 +289,7 @@ export default defineComponent({
 
           if (response.username !== void 0) {
             authStore.setUser(response.username);
+            apiStore.setJwt(response.jwt);
             router.push('/app');
           }
         }

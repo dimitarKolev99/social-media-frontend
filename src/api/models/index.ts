@@ -1,5 +1,6 @@
 export * from './ErrorMessage';
 export * from './FileInfo';
+export * from './JwtResponse';
 export * from './LoginRequest';
 export * from './Post';
 export * from './PostRequest';

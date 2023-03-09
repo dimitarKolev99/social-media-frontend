@@ -8,6 +8,7 @@ apis/index.ts
 index.ts
 models/ErrorMessage.ts
 models/FileInfo.ts
+models/JwtResponse.ts
 models/LoginRequest.ts
 models/Post.ts
 models/PostRequest.ts

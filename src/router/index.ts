@@ -48,7 +48,6 @@ export default route(function (/* { store, ssrContext } */) {
   // });
 
   Router.beforeEach((to, from, next) => {
-    console.log('FIRST ROUTER');
     const isLogged = window.localStorage.getItem('userInfo');
     if (from.path === '/app' && to.path === '/' && isLogged !== null) {
       return Router.push('/app');
