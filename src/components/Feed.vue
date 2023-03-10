@@ -1,6 +1,20 @@
 <template>
   <div class="column justify-center items-center">
-    <input @click="inputFocused" v-model="newPostInput" />
+    <q-input
+      type="text"
+      @click="inputFocused"
+      bg-color="white"
+      label="Make a post"
+      filled
+      autogrow
+      class="list-width q-py-lg"
+      v-model="newPostInput"
+    >
+      <template v-slot:append>
+        <q-icon name="send" class="cursor-pointer" />
+      </template>
+    </q-input>
+
     <q-dialog v-model="newPostModalOpened">
       <q-card class="modal-dialog" style="overflow: hidden">
         <q-card-section>
@@ -41,6 +55,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
     <q-list separator class="column justify-center items-center list-width">
       <Post v-for="post in posts" :key="post.id" :post="post" />
       <q-page-scroller position="top" :scroll-offset="150" :offset="[0, 0]">
