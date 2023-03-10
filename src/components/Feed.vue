@@ -1,14 +1,17 @@
 <template>
   <div class="column justify-center items-center">
     <input @click="inputFocused" v-model="newPostInput" />
-
     <q-dialog v-model="newPostModalOpened">
-      <q-card class="modal-dialog">
+      <q-card class="modal-dialog" style="overflow: hidden">
         <q-card-section>
-          <q-input type="textarea" v-model="newPostInput" />
+          <q-input type="textarea" v-model="newPostInput" class="resize-none" />
         </q-card-section>
-        <q-card-section v-if="addPhotoViewer">
-          <q-img v-if="addPhotoViewer && isImageUploaded" width="100%" />
+        <q-card-section>
+          <div style="height: 200px; position: relative" v-if="addPhotoViewer">
+            <div class="full-width" style="overflow-y: auto; max-height: 100%">
+              <img ref="previewImgRef" class="full-width" />
+            </div>
+          </div>
           <div class="photo-viewer">
             <q-icon
               v-if="addPhotoViewer"
@@ -18,14 +21,19 @@
               @click="iconClickHandler"
             />
           </div>
-          <input type="file" hidden ref="fileInputRef" />
+          <input
+            type="file"
+            hidden
+            @change="previewFile()"
+            ref="fileInputRef"
+          />
         </q-card-section>
         <q-card-actions>
           <q-btn
-            label="pic"
-            @click="addPhotoViewer = !addPhotoViewer"
+            icon="image"
+            @click="clickBtnHandler"
             color="green-4"
-            style="border-radius: 15%"
+            style="width: 1rem"
           />
         </q-card-actions>
         <q-card-actions>
@@ -83,6 +91,8 @@ export default defineComponent({
 
     const isImageUploaded = ref(false);
 
+    const previewImgRef = ref(null);
+
     onMounted(async () => {
       const apiStore = useApiStore();
       const postControllerApi: PostControllerApi =
@@ -95,21 +105,61 @@ export default defineComponent({
       posts.value = response.posts;
     });
 
-    function logoutHandler() {
+    function logoutHandler(): void {
       logout();
       router.push('/');
     }
 
-    function inputChangeHandler(e) {
+    function inputChangeHandler(e): void {
       console.log(e);
     }
 
-    function inputFocused(e) {
+    function inputFocused(e): void {
       newPostModalOpened.value = true;
     }
 
-    function iconClickHandler() {
+    function iconClickHandler(): void {
       fileInputRef.value.click();
+    }
+
+    function previewFile(): void {
+      const file: Element | null = fileInputRef.value.files[0];
+      const reader: FileReader = new FileReader();
+      reader.addEventListener(
+        'load',
+        function (): void {
+          previewImgRef.value.src = reader.result; // show image in <img> tag
+        },
+        false
+      );
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+
+    const isImgSrcEmpty = computed((): boolean => {
+      if (previewImgRef.value !== null) {
+        console.log('HERE');
+
+        return true;
+      }
+
+      return false;
+    });
+
+    const isFileInputNotEmpty = computed(() => {
+      if (fileInputRef.value.files.length > 0) {
+        console.log('NOT EMPTY');
+
+        return true;
+      }
+
+      return false;
+    });
+
+    function clickBtnHandler() {
+      console.log(fileInputRef.value.files.length);
+      addPhotoViewer.value = !addPhotoViewer.value;
     }
 
     return {
@@ -124,6 +174,11 @@ export default defineComponent({
       iconClickHandler,
       fileInputRef,
       isImageUploaded,
+      previewImgRef,
+      previewFile,
+      isImgSrcEmpty,
+      clickBtnHandler,
+      isFileInputNotEmpty,
     };
   },
 });
@@ -159,7 +214,10 @@ export default defineComponent({
   align-items: center
 
 .modal-dialog
-  width: 30%
+  width: 50%
+
+.resize-none .q-field__native
+  resize: none
 
 @media only screen and (max-width: 480px)
   .card-width
@@ -180,17 +238,17 @@ export default defineComponent({
 @media only screen and (min-width: 769px) and (max-width: 1024px)
   .card-width
     width: 100%
-  .list-width,
-  .modal-dialog
+  .list-width
     width: 40%
-
+  .modal-dialog
+    width: 60%
 @media only screen and (min-width: 1025px) and (max-width: 1200px)
   .card-width
     width: 100%
-  .list-width,
-  .modal-dialog
+  .list-width
     width: 30%
-
+  .modal-dialog
+    width: 50%
 
 
 .like-btn
