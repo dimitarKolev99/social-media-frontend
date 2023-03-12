@@ -13,27 +13,12 @@
 
 /**
  * @export
- * @interface SignupRequest
+ * @interface ResponseMessage
  */
-export interface SignupRequest {
+export interface ResponseMessage {
     /**
      * @type {string}
-     * @memberof SignupRequest
+     * @memberof ResponseMessage
      */
-    username?: string;
-    /**
-     * @type {string}
-     * @memberof SignupRequest
-     */
-    email?: string;
-    /**
-     * @type {string}
-     * @memberof SignupRequest
-     */
-    password?: string;
-    /**
-     * @type {Set<string>}
-     * @memberof SignupRequest
-     */
-    role?: Set<string>;
+    message?: string;
 }

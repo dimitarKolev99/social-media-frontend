@@ -1,3 +1,4 @@
+export * from './AddPostOnCurrentUserRequest';
 export * from './ErrorMessage';
 export * from './FileInfo';
 export * from './JwtResponse';
@@ -5,6 +6,7 @@ export * from './LoginRequest';
 export * from './Post';
 export * from './PostRequest';
 export * from './RefreshToken';
+export * from './ResponseMessage';
 export * from './Role';
 export * from './SignupRequest';
 export * from './User';

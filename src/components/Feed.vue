@@ -51,7 +51,12 @@
           />
         </q-card-actions>
         <q-card-actions>
-          <q-btn color="primary" label="Post" style="width: 100%" />
+          <q-btn
+            color="primary"
+            label="Post"
+            @click="createPost"
+            style="width: 100%"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -75,7 +80,7 @@ import { useAuthStore } from 'src/stores/auth';
 import { useRouter } from 'vue-router';
 import Post from './Post.vue';
 import { GetAllPostsRequest, PostControllerApi } from 'src/api';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, retry } from 'rxjs';
 import { useApiStore } from 'src/stores/ApiStore';
 
 const { logout } = useAuthStore();
@@ -83,118 +88,95 @@ const { logout } = useAuthStore();
 export default defineComponent({
   name: 'Feed',
   components: { Post },
-
-  setup(props) {
-    const router = useRouter();
-
-    const allPostRequest: GetAllPostsRequest = {
-      page: undefined,
-      size: undefined,
+  data() {
+    return {
+      posts: [],
+      newPostInput: '',
+      newPostModalOpened: false,
+      addPhotoViewer: false,
+      fileInputRef: null,
+      isImageUploaded: false,
+      previewImgRef: null,
     };
+  },
 
-    let response;
-
-    let posts = ref([]);
-
-    const newPostInput = ref('');
-
-    const newPostModalOpened = ref(false);
-
-    const addPhotoViewer = ref(false);
-
-    const fileInputRef = ref(null);
-
-    const isImageUploaded = ref(false);
-
-    const previewImgRef = ref(null);
-
-    onMounted(async () => {
-      const apiStore = useApiStore();
-      const postControllerApi: PostControllerApi =
-        apiStore.getPostControllerApi;
-
-      response = await lastValueFrom(
-        postControllerApi.getAllPosts(allPostRequest)
-      );
-
-      posts.value = response.posts;
-    });
-
-    function logoutHandler(): void {
-      logout();
-      router.push('/');
-    }
-
-    function inputChangeHandler(e): void {
-      console.log(e);
-    }
-
-    function inputFocused(e): void {
-      newPostModalOpened.value = true;
-    }
-
-    function iconClickHandler(): void {
-      fileInputRef.value.click();
-    }
-
-    function previewFile(): void {
-      const file: Element | null = fileInputRef.value.files[0];
-      const reader: FileReader = new FileReader();
-      reader.addEventListener(
-        'load',
-        function (): void {
-          previewImgRef.value.src = reader.result; // show image in <img> tag
-        },
-        false
-      );
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    }
-
-    const isImgSrcEmpty = computed((): boolean => {
-      if (previewImgRef.value !== null) {
+  computed: {
+    isImgSrcEmpty() {
+      if (this.previewImgRef.value !== null) {
         console.log('HERE');
 
         return true;
       }
 
       return false;
-    });
+    },
 
-    const isFileInputNotEmpty = computed(() => {
-      if (fileInputRef.value.files.length > 0) {
+    isFileInputNotEmpty() {
+      if (this.fileInputRef.value.files.length > 0) {
         console.log('NOT EMPTY');
 
         return true;
       }
 
       return false;
-    });
+    },
+  },
 
-    function clickBtnHandler() {
-      console.log(fileInputRef.value.files.length);
-      addPhotoViewer.value = !addPhotoViewer.value;
-    }
+  async mounted() {
+    const apiStore = useApiStore();
 
-    return {
-      logout,
-      logoutHandler,
-      posts,
-      inputChangeHandler,
-      newPostInput,
-      inputFocused,
-      newPostModalOpened,
-      addPhotoViewer,
-      iconClickHandler,
-      fileInputRef,
-      isImageUploaded,
-      previewImgRef,
-      previewFile,
-      isImgSrcEmpty,
-      clickBtnHandler,
-      isFileInputNotEmpty,
+    const postControllerApi: PostControllerApi = apiStore.getPostControllerApi;
+
+    const allPostRequest: GetAllPostsRequest = {
+      page: undefined,
+      size: undefined,
     };
+
+    const response = await lastValueFrom(
+      postControllerApi.getAllPosts(allPostRequest)
+    );
+
+    this.posts = response.posts;
+  },
+
+  methods: {
+    logoutHandler(): void {
+      const router = useRouter();
+      logout();
+      router.push('/');
+    },
+
+    inputChangeHandler(e): void {
+      console.log(e);
+    },
+
+    inputFocused(e): void {
+      this.newPostModalOpened = true;
+    },
+
+    iconClickHandler(): void {
+      this.fileInputRef.click();
+    },
+
+    previewFile(): void {
+      const file: Element | null = this.fileInputRef.files[0];
+      const reader: FileReader = new FileReader();
+      reader.addEventListener(
+        'load',
+        function (): void {
+          this.previewImgRef.src = reader.result; // show image in <img> tag
+        },
+        false
+      );
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    },
+
+    clickBtnHandler() {
+      console.log(this.fileInputRef.files.length);
+      this.addPhotoViewer = !this.addPhotoViewer;
+    },
   },
 });
 </script>

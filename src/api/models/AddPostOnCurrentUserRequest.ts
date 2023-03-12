@@ -11,29 +11,23 @@
  * Do not edit the class manually.
  */
 
+import type {
+    PostRequest,
+} from './';
+
 /**
  * @export
- * @interface SignupRequest
+ * @interface AddPostOnCurrentUserRequest
  */
-export interface SignupRequest {
+export interface AddPostOnCurrentUserRequest {
     /**
-     * @type {string}
-     * @memberof SignupRequest
+     * @type {Blob}
+     * @memberof AddPostOnCurrentUserRequest
      */
-    username?: string;
+    file?: Blob;
     /**
-     * @type {string}
-     * @memberof SignupRequest
+     * @type {PostRequest}
+     * @memberof AddPostOnCurrentUserRequest
      */
-    email?: string;
-    /**
-     * @type {string}
-     * @memberof SignupRequest
-     */
-    password?: string;
-    /**
-     * @type {Set<string>}
-     * @memberof SignupRequest
-     */
-    role?: Set<string>;
+    post: PostRequest;
 }

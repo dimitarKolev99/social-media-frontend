@@ -12,6 +12,7 @@
  */
 
 import type {
+    FileInfo,
     RefreshToken,
     Role,
 } from './';
@@ -51,6 +52,11 @@ export interface User {
      * @memberof User
      */
     refreshToken?: RefreshToken;
+    /**
+     * @type {FileInfo}
+     * @memberof User
+     */
+    fileInfo?: FileInfo;
     /**
      * @type {string}
      * @memberof User

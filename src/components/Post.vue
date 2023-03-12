@@ -10,9 +10,14 @@
         "
       >
         <img
-          width="32"
-          src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-          style="border-radius: 50%; margin-right: 1rem"
+          :src="imageSrc"
+          v-if="imageLoaded"
+          style="
+            border-radius: 50%;
+            margin-right: 1rem;
+            width: 40px;
+            height: 40px;
+          "
         />
 
         <div>{{ post.user.username }}</div>
@@ -85,22 +90,14 @@
             padding-bottom: 1rem;
           "
         >
-          <img
-            style="border-radius: 50%; margin-right: 1rem"
-            width="32"
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-          />
+          <img style="border-radius: 50%; margin-right: 1rem" width="32" />
           <div>
             <div>Dimitar Kolev</div>
             <div>Comment</div>
           </div>
         </div>
         <div style="display: flex; flex-direction: row; align-items: center">
-          <img
-            style="border-radius: 50%"
-            width="32"
-            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-          />
+          <img style="border-radius: 50%" width="32" />
           <q-input
             v-model="text"
             filled
@@ -122,6 +119,10 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
+import { useApiStore } from 'src/stores/ApiStore';
+import { PostControllerApi } from 'src/api';
+import { lastValueFrom } from 'rxjs';
+import { BASE_PATH } from 'src/api';
 
 export default defineComponent({
   name: 'Post',
@@ -129,12 +130,67 @@ export default defineComponent({
     post: Object,
   },
 
-  setup(props) {
-    const text = ref('');
-
+  data() {
     return {
-      text,
+      text: '',
+      imageSrc: null,
+      imageLoaded: false,
     };
+  },
+
+  methods: {
+    getProfilePicUrl(post) {
+      if (post.user.fileInfo && post.user.fileInfo.uri) {
+        const arg = post.user.fileInfo.uri.substring(
+          'file:///C:/Users/mitko/Documents/dev/demo/uploads/-'.length - 1
+        );
+        this.loadXMLDoc(arg);
+      } else {
+        this.imageLoaded = true;
+        this.imageSrc =
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+      }
+    },
+
+    loadXMLDoc(uri) {
+      var xmlhttp = new XMLHttpRequest();
+
+      xmlhttp.open('GET', BASE_PATH + '/uploads/' + uri);
+      xmlhttp.responseType = 'arraybuffer';
+      xmlhttp.setRequestHeader(
+        'Authorization',
+        window.localStorage.getItem('jwt')
+      );
+      xmlhttp.onload = () => {
+        if (xmlhttp.status === 200) {
+          var blob = new Blob([xmlhttp.response], { type: 'image/jpeg' }); // Create blob object
+          this.imageSrc = URL.createObjectURL(blob); // Create object URL
+          this.imageLoaded = true;
+        } else {
+          this.imageLoaded = true;
+          this.imageSrc =
+            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+        }
+      };
+
+      xmlhttp.send();
+    },
+  },
+
+  computed: {},
+
+  async mounted() {
+    const apiStore = useApiStore();
+    const postControllerApi: PostControllerApi = apiStore.getPostControllerApi;
+    this.getProfilePicUrl(this.post);
+    // let response;
+
+    // try {
+    //   response = await lastValueFrom(postControllerApi.getProfilePicture());
+    // } catch (e) {
+    //   console.log(e);
+    //   console.log('getProfilePicture: ', response);
+    // }
   },
 });
 </script>
