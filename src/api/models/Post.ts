@@ -12,6 +12,7 @@
  */
 
 import type {
+    Comment,
     FileInfo,
     User,
 } from './';
@@ -32,13 +33,33 @@ export interface Post {
      */
     description?: string;
     /**
+     * @type {number}
+     * @memberof Post
+     */
+    likeCount?: number;
+    /**
      * @type {User}
      * @memberof Post
      */
     user?: User;
     /**
+     * @type {Array<Comment>}
+     * @memberof Post
+     */
+    comments?: Array<Comment>;
+    /**
      * @type {FileInfo}
      * @memberof Post
      */
     fileInfo?: FileInfo;
+    /**
+     * @type {string}
+     * @memberof Post
+     */
+    createDateTime?: string;
+    /**
+     * @type {string}
+     * @memberof Post
+     */
+    updateDateTime?: string;
 }

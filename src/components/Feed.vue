@@ -79,9 +79,15 @@ import { defineComponent, onMounted, ref, computed } from 'vue';
 import { useAuthStore } from 'src/stores/auth';
 import { useRouter } from 'vue-router';
 import Post from './Post.vue';
-import { GetAllPostsRequest, PostControllerApi } from 'src/api';
+import {
+  AddPostOnCurrentUserRequest,
+  GetAllPostsRequest,
+  PostControllerApi,
+  PostRequest,
+} from 'src/api';
 import { lastValueFrom, retry } from 'rxjs';
 import { useApiStore } from 'src/stores/ApiStore';
+import { useQuasar } from 'quasar';
 
 const { logout } = useAuthStore();
 
@@ -102,7 +108,7 @@ export default defineComponent({
 
   computed: {
     isImgSrcEmpty() {
-      if (this.previewImgRef.value !== null) {
+      if (this.$refs.previewImgRef !== null) {
         console.log('HERE');
 
         return true;
@@ -112,7 +118,7 @@ export default defineComponent({
     },
 
     isFileInputNotEmpty() {
-      if (this.fileInputRef.value.files.length > 0) {
+      if (this.$refs.fileInputRef.files.length > 0) {
         console.log('NOT EMPTY');
 
         return true;
@@ -129,7 +135,7 @@ export default defineComponent({
 
     const allPostRequest: GetAllPostsRequest = {
       page: undefined,
-      size: undefined,
+      size: 6,
     };
 
     const response = await lastValueFrom(
@@ -155,16 +161,18 @@ export default defineComponent({
     },
 
     iconClickHandler(): void {
-      this.fileInputRef.click();
+      this.$refs.fileInputRef.click();
     },
 
     previewFile(): void {
-      const file: Element | null = this.fileInputRef.files[0];
+      const file: Element | null = this.$refs.fileInputRef.files[0];
+      let prevImgSrc = this.$refs.previewImgRef;
+      console.log(this.$refs.previewImgRef);
       const reader: FileReader = new FileReader();
       reader.addEventListener(
         'load',
         function (): void {
-          this.previewImgRef.src = reader.result; // show image in <img> tag
+          prevImgSrc.src = reader.result; // show image in <img> tag
         },
         false
       );
@@ -174,8 +182,53 @@ export default defineComponent({
     },
 
     clickBtnHandler() {
-      console.log(this.fileInputRef.files.length);
       this.addPhotoViewer = !this.addPhotoViewer;
+    },
+
+    async createPost() {
+      const $q = useQuasar();
+
+      const apiStore = useApiStore();
+      const postControllerApi: PostControllerApi =
+        apiStore.getPostControllerApi;
+
+      const addPostOnCurrentUser: AddPostOnCurrentUserRequest = {
+        description: this.newPostInput,
+        file: this.$refs.fileInputRef?.files[0],
+      };
+
+      const res = await lastValueFrom(
+        postControllerApi.addPostOnCurrentUser(addPostOnCurrentUser)
+      );
+
+      $q.notify({
+        color: res.id ? 'green-4' : 'red-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: res.id ? 'Created' : 'Creation failed',
+      });
+
+      if (res.id) {
+        this.newPostModalOpened = false;
+        this.getAllPosts(6);
+      }
+    },
+
+    async getAllPosts(size: number) {
+      const apiStore = useApiStore();
+      const postControllerApi: PostControllerApi =
+        apiStore.getPostControllerApi;
+
+      const allPostRequest: GetAllPostsRequest = {
+        page: undefined,
+        size: size || undefined,
+      };
+
+      const response = await lastValueFrom(
+        postControllerApi.getAllPosts(allPostRequest)
+      );
+
+      this.posts = response.posts;
     },
   },
 });

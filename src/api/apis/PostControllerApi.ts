@@ -16,20 +16,20 @@ import type { AjaxResponse } from 'rxjs/ajax';
 import { BaseAPI, throwIfNullOrUndefined, encodeURI } from '../runtime';
 import type { OperationOpts, HttpHeaders, HttpQuery } from '../runtime';
 import type {
-    AddPostOnCurrentUserRequest,
     ErrorMessage,
     Post,
     PostRequest,
-    ResponseMessage,
+    UpdatePostLikesRequest,
 } from '../models';
 
 export interface AddPostOnCurrentUserRequest {
-    addPostOnCurrentUserRequest?: AddPostOnCurrentUserRequest;
+    file?: Blob;
+    description?: string;
 }
 
 export interface CreatePostRequest {
     userId: number;
-    postRequest: PostRequest;
+    postRequest?: PostRequest;
 }
 
 export interface DeleteAllPostsOfUserRequest {
@@ -53,9 +53,14 @@ export interface GetPostByIdRequest {
     id: number;
 }
 
+export interface SetNewPostLikesRequest {
+    id: number;
+    updatePostLikesRequest?: UpdatePostLikesRequest;
+}
+
 export interface UpdatePostRequest {
     id: number;
-    postRequest: PostRequest;
+    postRequest?: PostRequest;
 }
 
 export interface UploadProfilePicRequest {
@@ -69,20 +74,23 @@ export class PostControllerApi extends BaseAPI {
 
     /**
      */
-    addPostOnCurrentUser({ addPostOnCurrentUserRequest }: AddPostOnCurrentUserRequest): Observable<ResponseMessage>
-    addPostOnCurrentUser({ addPostOnCurrentUserRequest }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<AjaxResponse<ResponseMessage>>
-    addPostOnCurrentUser({ addPostOnCurrentUserRequest }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<ResponseMessage | AjaxResponse<ResponseMessage>> {
+    addPostOnCurrentUser({ file, description }: AddPostOnCurrentUserRequest): Observable<Post>
+    addPostOnCurrentUser({ file, description }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
+    addPostOnCurrentUser({ file, description }: AddPostOnCurrentUserRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
 
         const headers: HttpHeaders = {
-            'Content-Type': 'application/json',
             ...(this.configuration.apiKey && { 'Authorization': this.configuration.apiKey('Authorization') }), // Authorization authentication
         };
 
-        return this.request<ResponseMessage>({
+        const formData = new FormData();
+        if (file !== undefined) { formData.append('file', file as any); }
+        if (description !== undefined) { formData.append('description', description as any); }
+
+        return this.request<Post>({
             url: '/api/posts',
             method: 'POST',
             headers,
-            body: addPostOnCurrentUserRequest,
+            body: formData,
         }, opts?.responseOpts);
     };
 
@@ -92,7 +100,6 @@ export class PostControllerApi extends BaseAPI {
     createPost({ userId, postRequest }: CreatePostRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
     createPost({ userId, postRequest }: CreatePostRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
         throwIfNullOrUndefined(userId, 'userId', 'createPost');
-        throwIfNullOrUndefined(postRequest, 'postRequest', 'createPost');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',
@@ -220,11 +227,30 @@ export class PostControllerApi extends BaseAPI {
 
     /**
      */
+    setNewPostLikes({ id, updatePostLikesRequest }: SetNewPostLikesRequest): Observable<Post>
+    setNewPostLikes({ id, updatePostLikesRequest }: SetNewPostLikesRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
+    setNewPostLikes({ id, updatePostLikesRequest }: SetNewPostLikesRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
+        throwIfNullOrUndefined(id, 'id', 'setNewPostLikes');
+
+        const headers: HttpHeaders = {
+            'Content-Type': 'application/json',
+            ...(this.configuration.apiKey && { 'Authorization': this.configuration.apiKey('Authorization') }), // Authorization authentication
+        };
+
+        return this.request<Post>({
+            url: '/api/posts/{id}/likes'.replace('{id}', encodeURI(id)),
+            method: 'PUT',
+            headers,
+            body: updatePostLikesRequest,
+        }, opts?.responseOpts);
+    };
+
+    /**
+     */
     updatePost({ id, postRequest }: UpdatePostRequest): Observable<Post>
     updatePost({ id, postRequest }: UpdatePostRequest, opts?: OperationOpts): Observable<AjaxResponse<Post>>
     updatePost({ id, postRequest }: UpdatePostRequest, opts?: OperationOpts): Observable<Post | AjaxResponse<Post>> {
         throwIfNullOrUndefined(id, 'id', 'updatePost');
-        throwIfNullOrUndefined(postRequest, 'postRequest', 'updatePost');
 
         const headers: HttpHeaders = {
             'Content-Type': 'application/json',

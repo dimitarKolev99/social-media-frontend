@@ -13,12 +13,12 @@
 
 /**
  * @export
- * @interface ResponseMessage
+ * @interface UpdatePostLikesRequest
  */
-export interface ResponseMessage {
+export interface UpdatePostLikesRequest {
     /**
-     * @type {string}
-     * @memberof ResponseMessage
+     * @type {number}
+     * @memberof UpdatePostLikesRequest
      */
-    message?: string;
+    numberLikes?: number;
 }

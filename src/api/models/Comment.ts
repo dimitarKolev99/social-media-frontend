@@ -13,17 +13,27 @@
 
 /**
  * @export
- * @interface PostRequest
+ * @interface Comment
  */
-export interface PostRequest {
+export interface Comment {
     /**
-     * @type {Blob}
-     * @memberof PostRequest
+     * @type {number}
+     * @memberof Comment
      */
-    file?: Blob;
+    id?: number;
     /**
      * @type {string}
-     * @memberof PostRequest
+     * @memberof Comment
      */
-    description?: string;
+    message?: string;
+    /**
+     * @type {string}
+     * @memberof Comment
+     */
+    createDateTime?: string;
+    /**
+     * @type {string}
+     * @memberof Comment
+     */
+    updateDateTime?: string;
 }

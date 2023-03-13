@@ -1,12 +1,14 @@
 .gitignore
 apis/AuthControllerApi.ts
+apis/CommentControllerApi.ts
 apis/FilesControllerApi.ts
 apis/PostControllerApi.ts
 apis/TestControllerApi.ts
 apis/UserControllerApi.ts
 apis/index.ts
 index.ts
-models/AddPostOnCurrentUserRequest.ts
+models/AddCommentOnPostRequest.ts
+models/Comment.ts
 models/ErrorMessage.ts
 models/FileInfo.ts
 models/JwtResponse.ts
@@ -14,9 +16,9 @@ models/LoginRequest.ts
 models/Post.ts
 models/PostRequest.ts
 models/RefreshToken.ts
-models/ResponseMessage.ts
 models/Role.ts
 models/SignupRequest.ts
+models/UpdatePostLikesRequest.ts
 models/User.ts
 models/index.ts
 runtime.ts

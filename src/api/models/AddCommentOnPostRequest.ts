@@ -11,23 +11,14 @@
  * Do not edit the class manually.
  */
 
-import type {
-    PostRequest,
-} from './';
-
 /**
  * @export
- * @interface AddPostOnCurrentUserRequest
+ * @interface AddCommentOnPostRequest
  */
-export interface AddPostOnCurrentUserRequest {
+export interface AddCommentOnPostRequest {
     /**
-     * @type {Blob}
-     * @memberof AddPostOnCurrentUserRequest
+     * @type {string}
+     * @memberof AddCommentOnPostRequest
      */
-    file?: Blob;
-    /**
-     * @type {PostRequest}
-     * @memberof AddPostOnCurrentUserRequest
-     */
-    post: PostRequest;
+    message?: string;
 }

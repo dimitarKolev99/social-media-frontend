@@ -26,11 +26,8 @@
     <q-card-section>
       <div>{{ post.description }}</div>
     </q-card-section>
-    <q-card-section class="text-center">
-      <q-img
-        width="50%"
-        src="https://cdn.quasar.dev/logo-v2/svg/logo.svg"
-      ></q-img>
+    <q-card-section class="text-center" v-if="showPostImg">
+      <q-img width="50%" :src="imageSrcPost"></q-img>
     </q-card-section>
     <q-card-section>
       <div
@@ -50,10 +47,10 @@
             align-items: flex-start;
           "
         >
-          <q-icon name="thumb_up" />
-          <div>12</div>
+          <q-icon name="thumb_up" size="1rem" style="margin-right: 0.5rem" />
+          <div>{{ likeCount }}</div>
         </div>
-        <div>12 Comments</div>
+        <div>{{ commentsCount }} Comments</div>
       </div>
     </q-card-section>
     <q-card-actions>
@@ -69,6 +66,7 @@
         <q-btn
           label="Like"
           style="width: 100%"
+          @click="likeBtnHandler"
           class="like-btn no-shadow segoe-600"
         />
         <q-btn
@@ -120,7 +118,11 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from 'vue';
 import { useApiStore } from 'src/stores/ApiStore';
-import { PostControllerApi } from 'src/api';
+import {
+  PostControllerApi,
+  SetNewPostLikesRequest,
+  UpdatePostLikesRequest,
+} from 'src/api';
 import { lastValueFrom } from 'rxjs';
 import { BASE_PATH } from 'src/api';
 
@@ -134,7 +136,11 @@ export default defineComponent({
     return {
       text: '',
       imageSrc: null,
+      imageSrcPost: null,
       imageLoaded: false,
+      showPostImg: false,
+      likeCount: 0,
+      commentsCount: 0,
     };
   },
 
@@ -144,7 +150,7 @@ export default defineComponent({
         const arg = post.user.fileInfo.uri.substring(
           'file:///C:/Users/mitko/Documents/dev/demo/uploads/-'.length - 1
         );
-        this.loadXMLDoc(arg);
+        this.loadXMLDoc(arg, 'profile');
       } else {
         this.imageLoaded = true;
         this.imageSrc =
@@ -152,7 +158,7 @@ export default defineComponent({
       }
     },
 
-    loadXMLDoc(uri) {
+    loadXMLDoc(uri, imgType) {
       var xmlhttp = new XMLHttpRequest();
 
       xmlhttp.open('GET', BASE_PATH + '/uploads/' + uri);
@@ -162,10 +168,14 @@ export default defineComponent({
         window.localStorage.getItem('jwt')
       );
       xmlhttp.onload = () => {
-        if (xmlhttp.status === 200) {
+        if (xmlhttp.status === 200 && imgType === 'profile') {
           var blob = new Blob([xmlhttp.response], { type: 'image/jpeg' }); // Create blob object
           this.imageSrc = URL.createObjectURL(blob); // Create object URL
           this.imageLoaded = true;
+        } else if (xmlhttp.status === 200) {
+          var blob = new Blob([xmlhttp.response], { type: 'image/jpeg' }); // Create blob object
+          this.showPostImg = true;
+          this.imageSrcPost = URL.createObjectURL(blob); // Create object URL
         } else {
           this.imageLoaded = true;
           this.imageSrc =
@@ -175,6 +185,33 @@ export default defineComponent({
 
       xmlhttp.send();
     },
+
+    async likeBtnHandler() {
+      this.likeCount += 1;
+      console.log(this.likeCount);
+
+      const apiStore = useApiStore();
+      const postControllerApi: PostControllerApi =
+        apiStore.getPostControllerApi;
+
+      const updateLikesReq: UpdatePostLikesRequest = {
+        numberLikes: this.likeCount,
+      };
+
+      const updatePostLikesRequest: SetNewPostLikesRequest = {
+        id: this.post?.id,
+        updatePostLikesRequest: updateLikesReq,
+      };
+
+      console.log('REQ ', updatePostLikesRequest);
+
+      const res = await lastValueFrom(
+        postControllerApi.setNewPostLikes(updatePostLikesRequest)
+      );
+
+      this.likeCount = res.likeCount;
+      console.log('here', res.likeCount);
+    },
   },
 
   computed: {},
@@ -183,6 +220,28 @@ export default defineComponent({
     const apiStore = useApiStore();
     const postControllerApi: PostControllerApi = apiStore.getPostControllerApi;
     this.getProfilePicUrl(this.post);
+
+    if (this.post && this.post.fileInfo && this.post.fileInfo.uri) {
+      const arg = this.post.fileInfo.uri.substring(
+        'file:///C:/Users/mitko/Documents/dev/demo/uploads/-'.length - 1
+      );
+
+      this.loadXMLDoc(arg);
+
+      this.showPostImg = true;
+      this.imageSrcPost = this.post.fileInfo.uri;
+    }
+
+    if (this.post?.likeCount === null) {
+      this.likeCount = 0;
+    } else {
+      this.likeCount = this.post?.likeCount;
+    }
+
+    if (this.post?.comments) {
+      this.commentsCount = this.post?.comments.length;
+    }
+
     // let response;
 
     // try {
